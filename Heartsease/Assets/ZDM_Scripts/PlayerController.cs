@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     public float playerHeartease;
     public float playerStress;
 
+    public Slider stressMeter;
+
     public float moveSpeed= 7f;
     public float movePenalty = 0f;
     public Transform nextPoint, lastPoint;
@@ -23,11 +25,17 @@ public class PlayerController : MonoBehaviour
 
     public float stressPenalty;
 
-    public bool isBusy;
+    public bool isBusy = false;
+    public bool canMove = true;
 
     public GameObject checkInBox;
     public Text checkInText;
     public List<string> checkInLines;
+
+    public GameObject breathingUI;
+    public BreathingCursor breathingCursor;
+
+    public GameObject node;
 
     public List<string> negativeText;
     public List<string> positiveText;
@@ -36,9 +44,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(canMove);
         transform.position = Vector3.MoveTowards(transform.position, nextPoint.position, (moveSpeed - movePenalty) * Time.deltaTime);
 
-        if (Vector3.Distance(transform.position, nextPoint.position) == 0)
+        if (Vector3.Distance(transform.position, nextPoint.position) == 0 && canMove)
         {
 
             if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f)
@@ -82,7 +91,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
-                    checkInText.text = "Maybe you should try Breath or Grounding";
+                    checkInText.text = "I feel stressed. Maybe I should try Breathing or Grounding";
                     checkInBox.SetActive(true);
                 }
             }
@@ -90,6 +99,14 @@ public class PlayerController : MonoBehaviour
             {
                 StartCoroutine(Cry());
             }
+        }
+
+        if(Input.GetKeyDown(KeyCode.Z) && !isBusy)
+        {
+            isBusy = true;
+            canMove = false;
+            breathingUI.SetActive(true);
+            breathingCursor.Go(this);
         }
     }
 
@@ -116,6 +133,7 @@ public class PlayerController : MonoBehaviour
     public void ChangeStress(float value)
     {
         playerStress = Mathf.Clamp(playerStress + stressPenalty + value, 0, 100);
+        stressMeter.value = playerStress;
         if(playerStress >= 100f)
         {
 
