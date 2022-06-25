@@ -37,10 +37,16 @@ public class PlayerController : MonoBehaviour
 
     public GameObject node;
 
+    public List<ThoughtButton> thoughts;
     public List<string> negativeText;
     public List<string> positiveText;
 
     int random;
+
+    public Animator stressMinorDarkness;
+    public Animator stressMinorLight;
+
+    bool stressed_Minor;
 
     void Update()
     {
@@ -108,6 +114,16 @@ public class PlayerController : MonoBehaviour
             breathingUI.SetActive(true);
             breathingCursor.Go(this);
         }
+
+        if (Input.GetKeyDown(KeyCode.X) && !isBusy)
+        {
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            ChangeStress(1);
+        }
     }
 
     public void ChangeHearts(float value)
@@ -136,10 +152,22 @@ public class PlayerController : MonoBehaviour
         stressMeter.value = playerStress;
         if(playerStress >= 100f)
         {
-
-        }else if(playerStress >= 90f)
+            for (int i = 0; i < thoughts.Count; i++)
+            {
+                thoughts[i].gameObject.SetActive(false);
+            }
+            stressMinorLight.Play("VanishLight");
+            StartCoroutine(Save());
+        }
+        else if(playerStress >= 90f)
         {
-
+            if (!stressed_Minor)
+            {
+                stressMinorDarkness.Play("Fade");
+                stressMinorLight.Play("FadeLight");
+                stressed_Minor = true;
+                StartCoroutine(Stressing());
+            }
         }
     }
 
@@ -158,5 +186,47 @@ public class PlayerController : MonoBehaviour
     {
         checkInBox.SetActive(false);
         isBusy = false;
+    }
+
+    public IEnumerator Stressing()
+    {
+        ChangeStress(1);
+        random = Random.Range(0, thoughts.Count);
+        if (thoughts[random].isPositive)
+        {
+            thoughts[random].gameObject.SetActive(true);
+            thoughts[random].SetUp(positiveText[Random.Range(0, positiveText.Count)], negativeText[Random.Range(0, negativeText.Count)], this);
+        }
+        else
+        {
+            random = Random.Range(0, thoughts.Count);
+            if (thoughts[random].isPositive)
+            {
+                thoughts[random].gameObject.SetActive(true);
+                thoughts[random].SetUp(positiveText[Random.Range(0, positiveText.Count)], negativeText[Random.Range(0, negativeText.Count)], this);
+            }
+        }
+        yield return new WaitForSecondsRealtime(1);
+        if(playerStress >= 90 && playerStress < 100)
+        {
+            StartCoroutine(Stressing());
+        }
+        else if(playerStress < 100)
+        {
+            for(int i = 0; i < thoughts.Count; i++)
+            {
+                thoughts[i].gameObject.SetActive(false);
+            }
+            stressMinorDarkness.Play("Vanish");
+            stressMinorLight.Play("VanishLight");
+        }
+    }
+
+    public IEnumerator Save()
+    {
+        //Play Animation
+        yield return new WaitForSecondsRealtime(3);
+        ChangeStress(-25);
+        ChangeHearts(-1);
     }
 }
