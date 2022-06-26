@@ -9,9 +9,17 @@ public class NPCController : MonoBehaviour
 
     public string npc_Name;
 
+    public Animator anime;
     public void Interact(PlayerController player)
     {
-        Debug.Log(hasHeart);
+        if (!hasHeart)
+        {
+            anime.Play("Talking");
+            player.ChangeHearts(0.25f);
+            player.ChangeStress(5f);
+        }
+
+        /*
         if (hasHeart)
         {
             if (!heartConsumed)
@@ -30,5 +38,6 @@ public class NPCController : MonoBehaviour
             player.ChangeHearts(0.25f);
             player.ChangeStress(5f);
         }
+        */
     }
 }
