@@ -5,6 +5,8 @@ using UnityEngine;
 public class GroundingGame : MonoBehaviour
 {
 
+    public PlayerController player;
+
     public GameObject qSquare;
     public GameObject rSquare;
     public GameObject newBox;
@@ -53,12 +55,11 @@ public class GroundingGame : MonoBehaviour
             
             if (points >= 3)
             {
-                Destroy(leftChest);
-                Destroy(rightChest);
+                player.ChangeStress(-15);
+                player.isBusy = false;
+                player.canMove = true;
+                this.gameObject.SetActive(false);
             }
         }
-
-        
     }
-
 }
