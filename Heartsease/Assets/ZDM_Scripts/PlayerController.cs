@@ -12,8 +12,6 @@ public class PlayerController : MonoBehaviour
     public float playerHeartease;
     public float playerStress;
 
-    public Slider stressMeter;
-
     public float moveSpeed= 7f;
     public float movePenalty = 0f;
     public Transform nextPoint, lastPoint;
@@ -37,8 +35,6 @@ public class PlayerController : MonoBehaviour
 
     public GameObject breathingUI;
     public BreathingCursor breathingCursor;
-
-    public GameObject node;
 
     public List<ThoughtButton> thoughts;
     public List<string> negativeText;
