@@ -51,6 +51,11 @@ public class GroundingGame : MonoBehaviour
                 currentTime = 0;
             }
             
+            if (points >= 3)
+            {
+                Destroy(leftChest);
+                Destroy(rightChest);
+            }
         }
 
         
