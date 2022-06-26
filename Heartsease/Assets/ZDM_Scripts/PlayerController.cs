@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    public Animator anime;
+    public SpriteRenderer sprite;
+
     public float playerHearts;
     public float playerHeartease;
     public float playerStress;
@@ -55,12 +58,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(canMove);
         transform.position = Vector3.MoveTowards(transform.position, nextPoint.position, (moveSpeed - movePenalty) * Time.deltaTime);
 
         if (Vector3.Distance(transform.position, nextPoint.position) == 0 && canMove)
         {
-
             if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f)
             {
                 if (!Physics2D.OverlapCircle(nextPoint.position + new Vector3(Input.GetAxisRaw("Horizontal"), 0, 0), .2f, obstacleLayer))
@@ -68,6 +69,18 @@ public class PlayerController : MonoBehaviour
                     lastPoint.position = nextPoint.position;
                     nextPoint.position += new Vector3(Input.GetAxisRaw("Horizontal"), 0, 0);
                     facingDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, 0);
+                    if (Input.GetAxisRaw("Horizontal") > 0)
+                    {
+                        sprite.flipX = true;
+                    }
+                    else
+                    {
+                        sprite.flipX = false;
+                    }
+                }
+                else
+                {
+                    anime.SetBool("IsMoving", false);
                 }
             }
             else if (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1f)
@@ -78,7 +91,27 @@ public class PlayerController : MonoBehaviour
                     nextPoint.position += new Vector3(0, Input.GetAxisRaw("Vertical"), 0);
                     facingDirection = new Vector3(0, Input.GetAxisRaw("Vertical"), 0);
                 }
+                else
+                {
+                    anime.SetBool("IsMoving", false);
+                }
             }
+            else
+            {
+                anime.SetBool("IsMoving", false);
+                if (Input.GetAxis("Horizontal") > 0)
+                {
+                    sprite.flipX = true;
+                }
+                else if (Input.GetAxis("Horizontal") < 0)
+                {
+                    sprite.flipX = false;
+                }
+            }
+        }
+        else
+        {
+            anime.SetBool("IsMoving", true);
         }
 
         if (Input.GetButtonDown("Fire1"))
@@ -189,6 +222,7 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator Cry()
     {
+        anime.SetBool("IsCrying", true);
         isBusy = true;
         movePenalty = 2f;
         stressPenalty = 5f;
@@ -196,6 +230,7 @@ public class PlayerController : MonoBehaviour
         movePenalty = 0f;
         stressPenalty = 0f;
         isBusy = false;
+        anime.SetBool("IsCrying", false);
     }
 
     public void closeCheckIn()
