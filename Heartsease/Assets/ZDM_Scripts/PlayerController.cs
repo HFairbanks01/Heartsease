@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    public Animator anime;
+    public SpriteRenderer sprite;
+
     public float playerHearts;
     public float playerHeartease;
     public float playerStress;
@@ -18,7 +21,7 @@ public class PlayerController : MonoBehaviour
 
     public Vector3 facingDirection;
     public LayerMask npcLayer;
-
+    public LayerMask interactLayer;
     Collider2D hit;
 
     public float cryDuration;
@@ -48,14 +51,17 @@ public class PlayerController : MonoBehaviour
 
     bool stressed_Minor;
 
+    public GameObject needle;
+    public Quaternion needleTarget;
+
+    public GameObject alleyUI;
+
     void Update()
     {
-        Debug.Log(canMove);
         transform.position = Vector3.MoveTowards(transform.position, nextPoint.position, (moveSpeed - movePenalty) * Time.deltaTime);
 
         if (Vector3.Distance(transform.position, nextPoint.position) == 0 && canMove)
         {
-
             if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f)
             {
                 if (!Physics2D.OverlapCircle(nextPoint.position + new Vector3(Input.GetAxisRaw("Horizontal"), 0, 0), .2f, obstacleLayer))
@@ -63,6 +69,18 @@ public class PlayerController : MonoBehaviour
                     lastPoint.position = nextPoint.position;
                     nextPoint.position += new Vector3(Input.GetAxisRaw("Horizontal"), 0, 0);
                     facingDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, 0);
+                    if (Input.GetAxisRaw("Horizontal") > 0)
+                    {
+                        sprite.flipX = true;
+                    }
+                    else
+                    {
+                        sprite.flipX = false;
+                    }
+                }
+                else
+                {
+                    anime.SetBool("IsMoving", false);
                 }
             }
             else if (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1f)
@@ -73,7 +91,27 @@ public class PlayerController : MonoBehaviour
                     nextPoint.position += new Vector3(0, Input.GetAxisRaw("Vertical"), 0);
                     facingDirection = new Vector3(0, Input.GetAxisRaw("Vertical"), 0);
                 }
+                else
+                {
+                    anime.SetBool("IsMoving", false);
+                }
             }
+            else
+            {
+                anime.SetBool("IsMoving", false);
+                if (Input.GetAxis("Horizontal") > 0)
+                {
+                    sprite.flipX = true;
+                }
+                else if (Input.GetAxis("Horizontal") < 0)
+                {
+                    sprite.flipX = false;
+                }
+            }
+        }
+        else
+        {
+            anime.SetBool("IsMoving", true);
         }
 
         if (Input.GetButtonDown("Fire1"))
@@ -81,6 +119,13 @@ public class PlayerController : MonoBehaviour
             if (hit = Physics2D.OverlapCircle(this.transform.position + facingDirection, .2f, npcLayer))
             {
                 hit.gameObject.GetComponent<NPCController>().Interact(this);
+            }
+            if (hit = Physics2D.OverlapCircle(this.transform.position + facingDirection, .2f, interactLayer))
+            {
+                if(hit.gameObject.tag == "Alleyway")
+                {
+                    alleyUI.SetActive(true);
+                }
             }
         }
 
@@ -124,6 +169,9 @@ public class PlayerController : MonoBehaviour
         {
             ChangeStress(1);
         }
+
+
+        needle.transform.rotation = Quaternion.RotateTowards(needle.transform.rotation, needleTarget, 10 * Time.deltaTime);
     }
 
     public void ChangeHearts(float value)
@@ -149,7 +197,8 @@ public class PlayerController : MonoBehaviour
     public void ChangeStress(float value)
     {
         playerStress = Mathf.Clamp(playerStress + stressPenalty + value, 0, 100);
-        stressMeter.value = playerStress;
+        //stressMeter.value = playerStress;
+        needleTarget = Quaternion.Euler(0, 0, Mathf.Lerp(90, -90, playerStress / 100));
         if(playerStress >= 100f)
         {
             for (int i = 0; i < thoughts.Count; i++)
@@ -173,6 +222,7 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator Cry()
     {
+        anime.SetBool("IsCrying", true);
         isBusy = true;
         movePenalty = 2f;
         stressPenalty = 5f;
@@ -180,6 +230,7 @@ public class PlayerController : MonoBehaviour
         movePenalty = 0f;
         stressPenalty = 0f;
         isBusy = false;
+        anime.SetBool("IsCrying", false);
     }
 
     public void closeCheckIn()
@@ -228,5 +279,19 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSecondsRealtime(3);
         ChangeStress(-25);
         ChangeHearts(-1);
+    }
+
+    public void AlleyYes()
+    {
+        random = Random.Range(0, 10);
+        if(random > 5)
+        {
+            ChangeStress(25);
+        }
+    }
+
+    public void AlleyNo()
+    {
+        alleyUI.SetActive(false);
     }
 }
