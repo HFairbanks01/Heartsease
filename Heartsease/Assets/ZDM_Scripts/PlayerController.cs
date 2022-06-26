@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
     public Vector3 facingDirection;
     public LayerMask npcLayer;
-
+    public LayerMask interactLayer;
     Collider2D hit;
 
     public float cryDuration;
@@ -47,6 +47,11 @@ public class PlayerController : MonoBehaviour
     public Animator stressMinorLight;
 
     bool stressed_Minor;
+
+    public GameObject needle;
+    public Quaternion needleTarget;
+
+    public GameObject alleyUI;
 
     void Update()
     {
@@ -81,6 +86,13 @@ public class PlayerController : MonoBehaviour
             if (hit = Physics2D.OverlapCircle(this.transform.position + facingDirection, .2f, npcLayer))
             {
                 hit.gameObject.GetComponent<NPCController>().Interact(this);
+            }
+            if (hit = Physics2D.OverlapCircle(this.transform.position + facingDirection, .2f, interactLayer))
+            {
+                if(hit.gameObject.tag == "Alleyway")
+                {
+                    alleyUI.SetActive(true);
+                }
             }
         }
 
@@ -124,6 +136,9 @@ public class PlayerController : MonoBehaviour
         {
             ChangeStress(1);
         }
+
+
+        needle.transform.rotation = Quaternion.RotateTowards(needle.transform.rotation, needleTarget, 10 * Time.deltaTime);
     }
 
     public void ChangeHearts(float value)
@@ -149,7 +164,8 @@ public class PlayerController : MonoBehaviour
     public void ChangeStress(float value)
     {
         playerStress = Mathf.Clamp(playerStress + stressPenalty + value, 0, 100);
-        stressMeter.value = playerStress;
+        //stressMeter.value = playerStress;
+        needleTarget = Quaternion.Euler(0, 0, Mathf.Lerp(90, -90, playerStress / 100));
         if(playerStress >= 100f)
         {
             for (int i = 0; i < thoughts.Count; i++)
@@ -228,5 +244,19 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSecondsRealtime(3);
         ChangeStress(-25);
         ChangeHearts(-1);
+    }
+
+    public void AlleyYes()
+    {
+        random = Random.Range(0, 10);
+        if(random > 5)
+        {
+            ChangeStress(25);
+        }
+    }
+
+    public void AlleyNo()
+    {
+        alleyUI.SetActive(false);
     }
 }
