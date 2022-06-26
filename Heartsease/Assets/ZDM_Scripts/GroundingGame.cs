@@ -31,6 +31,10 @@ public class GroundingGame : MonoBehaviour
             {
                 
             }
+            else if (randomNumber == 1)
+            {
+
+            }
             currentTime = 0;
         }
     }
