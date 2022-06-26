@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     public float playerHeartease;
     public float playerStress;
 
+    public Slider playerEase;
+
     public Image heartGauge;
     public Sprite emptyHeart;
     public Sprite partialHeart1, partialHeart2, partialHeart3;
@@ -221,6 +223,7 @@ public class PlayerController : MonoBehaviour
     public void ChangeHeartease(float value)
     {
         playerHeartease = Mathf.Clamp(playerHeartease + value, 0, 100);
+        playerEase.value = playerHeartease;
     }
 
     public void ChangeStress(float value)
