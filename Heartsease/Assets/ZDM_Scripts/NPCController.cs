@@ -10,13 +10,12 @@ public class NPCController : MonoBehaviour
     public string npc_Name;
 
     public Animator anime;
+
     public void Interact(PlayerController player)
     {
         if (!hasHeart)
         {
-            anime.Play("Talking");
-            player.ChangeHearts(0.25f);
-            player.ChangeStress(5f);
+            StartCoroutine(Talk(player));
         }
 
         /*
@@ -39,5 +38,15 @@ public class NPCController : MonoBehaviour
             player.ChangeStress(5f);
         }
         */
+    }
+
+    public IEnumerator Talk(PlayerController target)
+    {
+        anime.gameObject.SetActive(true);
+        anime.Play("Talking_Bad");
+        target.ChangeHearts(0.25f);
+        target.ChangeStress(5f);
+        yield return new WaitForSecondsRealtime(2.5f);
+        anime.gameObject.SetActive(false);
     }
 }
