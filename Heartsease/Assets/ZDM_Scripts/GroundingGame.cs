@@ -19,6 +19,12 @@ public class GroundingGame : MonoBehaviour
     public int points;
     private float randomNumber;
 
+    void Start()
+    {
+        leftChest.SetActive(true);
+        rightChest.SetActive(true);
+    }
+
     // Update is called once per frame
     void Update()
     {
