@@ -5818,6 +5818,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dab5953dd829aa8488a42e83d7dc75bb, type: 3}
+--- !u!1 &1015547118 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1318917083586526390, guid: f82aa65b94971294f83143af5cac14dc, type: 3}
+  m_PrefabInstance: {fileID: 1227400933}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1053651152
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9472,6 +9477,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 39bd407a64edded43aa6cb9079f2e18b, type: 3}
+--- !u!1 &1564746302 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1318917083586526390, guid: f82aa65b94971294f83143af5cac14dc, type: 3}
+  m_PrefabInstance: {fileID: 1141779616}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1564770125
 GameObject:
   m_ObjectHideFlags: 0
@@ -9503,6 +9513,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f8330bf2891c914bb93c1e8b8728394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anime: {fileID: 0}
+  sprite: {fileID: 0}
   playerHearts: 0
   playerHeartease: 0
   playerStress: 0
@@ -9516,6 +9528,9 @@ MonoBehaviour:
     m_Bits: 0
   facingDirection: {x: 0, y: 0, z: 0}
   npcLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  interactLayer:
     serializedVersion: 2
     m_Bits: 0
   cryDuration: 0
@@ -9533,6 +9548,9 @@ MonoBehaviour:
   positiveText: []
   stressMinorDarkness: {fileID: 0}
   stressMinorLight: {fileID: 0}
+  needle: {fileID: 0}
+  needleTarget: {x: 0, y: 0, z: 0, w: 0}
+  alleyUI: {fileID: 0}
 --- !u!212 &1564770127
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9620,12 +9638,15 @@ MonoBehaviour:
   box: {fileID: 1318917083586526390, guid: f82aa65b94971294f83143af5cac14dc, type: 3}
   square: {fileID: 2146588043794589696, guid: 2d1963353cf484e4ab187907ed1a9ade, type: 3}
   newBox: {fileID: 0}
+  leftChest: {fileID: 1564746302}
+  rightChest: {fileID: 1015547118}
   leftSpawnPoint: {fileID: 1914435726}
   rightSpawnPoint: {fileID: 946175725}
-  leftVelocity: 0
-  rightVelocity: 0
+  leftVelocity: 2.5
+  rightVelocity: 3.5
   TickTime: 1
   currentTime: 0
+  points: 0
 --- !u!1001 &1577233452
 PrefabInstance:
   m_ObjectHideFlags: 0
