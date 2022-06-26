@@ -12,6 +12,13 @@ public class PlayerController : MonoBehaviour
     public float playerHeartease;
     public float playerStress;
 
+    public Slider playerEase;
+
+    public Image heartGauge;
+    public Sprite emptyHeart;
+    public Sprite partialHeart1, partialHeart2, partialHeart3;
+    public Sprite fullHeart;
+
     public float moveSpeed= 7f;
     public float movePenalty = 0f;
     public Transform nextPoint, lastPoint;
@@ -53,6 +60,12 @@ public class PlayerController : MonoBehaviour
     public GameObject alleyUI;
     public Transform alleyA, alleyB;
 
+    public GameObject eButton;
+
+    public GameObject grounding;
+
+    public Animator portrait;
+
     void Update()
     {
         transform.position = Vector3.MoveTowards(transform.position, nextPoint.position, (moveSpeed - movePenalty) * Time.deltaTime);
@@ -61,11 +74,11 @@ public class PlayerController : MonoBehaviour
         {
             if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f)
             {
-                if (!Physics2D.OverlapCircle(nextPoint.position + new Vector3(Input.GetAxisRaw("Horizontal"), 0, 0), .2f, obstacleLayer))
+                if (!Physics2D.OverlapCircle(nextPoint.position + new Vector3(Input.GetAxisRaw("Horizontal") / 2, 0, 0), .2f, obstacleLayer))
                 {
                     lastPoint.position = nextPoint.position;
-                    nextPoint.position += new Vector3(Input.GetAxisRaw("Horizontal"), 0, 0);
-                    facingDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, 0);
+                    nextPoint.position += new Vector3(Input.GetAxisRaw("Horizontal") / 2, 0, 0);
+                    facingDirection = new Vector3(Input.GetAxisRaw("Horizontal") / 2, 0, 0);
                     if (Input.GetAxisRaw("Horizontal") > 0)
                     {
                         sprite.flipX = true;
@@ -82,11 +95,11 @@ public class PlayerController : MonoBehaviour
             }
             else if (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1f)
             {
-                if (!Physics2D.OverlapCircle(nextPoint.position + new Vector3(0, Input.GetAxisRaw("Vertical"), 0), .2f, obstacleLayer))
+                if (!Physics2D.OverlapCircle(nextPoint.position + new Vector3(0, Input.GetAxisRaw("Vertical") / 2, 0), .2f, obstacleLayer))
                 {
                     lastPoint.position = nextPoint.position;
-                    nextPoint.position += new Vector3(0, Input.GetAxisRaw("Vertical"), 0);
-                    facingDirection = new Vector3(0, Input.GetAxisRaw("Vertical"), 0);
+                    nextPoint.position += new Vector3(0, Input.GetAxisRaw("Vertical") / 2, 0);
+                    facingDirection = new Vector3(0, Input.GetAxisRaw("Vertical") / 2, 0);
                 }
                 else
                 {
@@ -115,13 +128,25 @@ public class PlayerController : MonoBehaviour
             anime.SetBool("IsMoving", false);
         }
 
+        if (hit = Physics2D.OverlapCircle(this.transform.position, 1.1f, npcLayer))
+        {
+            eButton.SetActive(true);
+        }else if(hit = Physics2D.OverlapCircle(this.transform.position, 1.1f, interactLayer))
+        {
+            eButton.SetActive(true);
+        }
+        else
+        {
+            eButton.SetActive(false);
+        }
+
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (hit = Physics2D.OverlapCircle(this.transform.position, 2f, npcLayer))
+            if (hit = Physics2D.OverlapCircle(this.transform.position, 1.1f, npcLayer))
             {
                 hit.gameObject.GetComponent<NPCController>().Interact(this);
             }
-            if (hit = Physics2D.OverlapCircle(this.transform.position, 2, interactLayer))
+            if (hit = Physics2D.OverlapCircle(this.transform.position, 1.1f, interactLayer))
             {
                 Debug.Log(hit.gameObject.tag);
                 if (hit.gameObject.tag == "Alleyway")
@@ -160,11 +185,15 @@ public class PlayerController : MonoBehaviour
             canMove = false;
             breathingUI.SetActive(true);
             breathingCursor.Go(this);
+            portrait.SetInteger("State", 4);
         }
 
         if (Input.GetKeyDown(KeyCode.X) && !isBusy)
         {
-
+            isBusy = true;
+            canMove = false;
+            grounding.SetActive(true);
+            portrait.SetInteger("State", 3);
         }
 
         needle.transform.rotation = Quaternion.RotateTowards(needle.transform.rotation, needleTarget, 10 * Time.deltaTime);
@@ -172,22 +201,37 @@ public class PlayerController : MonoBehaviour
 
     public void ChangeHearts(float value)
     {
-        float heartCheck = playerHearts;
-        while(heartCheck >= 1)
-        {
-            heartCheck -= 1;
-        }
-        if(heartCheck + value >= 1)
+        if(playerHearts + value >= 1)
         {
             ChangeHeartease(10f);
         }
-        playerHearts = Mathf.Clamp(playerHearts + value, 0, 5);
-        
+        playerHearts = Mathf.Clamp(playerHearts + value, 0, 1);
+        if(playerHearts < .25f)
+        {
+            heartGauge.sprite = emptyHeart;
+        }
+        else if( playerHearts < .5f)
+        {
+            heartGauge.sprite = partialHeart1;
+        }
+        else if (playerHearts < .75f)
+        {
+            heartGauge.sprite = partialHeart2;
+        }
+        else if (playerHearts < 1f)
+        {
+            heartGauge.sprite = partialHeart3;
+        }
+        else
+        {
+            heartGauge.sprite = fullHeart;
+        }
     }
 
     public void ChangeHeartease(float value)
     {
         playerHeartease = Mathf.Clamp(playerHeartease + value, 0, 100);
+        playerEase.value = playerHeartease;
     }
 
     public void ChangeStress(float value)
@@ -212,7 +256,16 @@ public class PlayerController : MonoBehaviour
                 stressMinorLight.Play("FadeLight");
                 stressed_Minor = true;
                 StartCoroutine(Stressing());
+                portrait.SetInteger("State", 2);
             }
+        }
+        else if(playerStress < 90)
+        {
+            portrait.SetInteger("State", 1);
+        }
+        else if (playerStress < 30)
+        {
+            portrait.SetInteger("State", 0);
         }
     }
 

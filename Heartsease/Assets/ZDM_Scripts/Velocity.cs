@@ -13,12 +13,12 @@ public class Velocity : MonoBehaviour
     void Update()
     {
         transform.position -= Vector3.up * targetVelocity * Time.deltaTime;
-        if (Vector2.Distance(this.transform.position, targetChest.transform.position) <= 0.1 && targetVelocity <= 3 && Input.GetKeyDown(KeyCode.Q))
+        if (Vector2.Distance(this.transform.position, targetChest.transform.position) <= 0.25 && targetVelocity <= 3 && Input.GetKeyDown(KeyCode.Q))
         {
             game.points += 1;
             Destroy(this.gameObject);
         }
-        else if (Vector2.Distance(this.transform.position, targetChest.transform.position) <= 0.1 && targetVelocity >= 3 && Input.GetKeyDown(KeyCode.R))
+        else if (Vector2.Distance(this.transform.position, targetChest.transform.position) <= 0.25 && targetVelocity >= 3 && Input.GetKeyDown(KeyCode.R))
         {
             game.points += 1;
             Destroy(this.gameObject);

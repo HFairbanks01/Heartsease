@@ -9,26 +9,50 @@ public class NPCController : MonoBehaviour
 
     public string npc_Name;
 
+    public Animator anime;
+
     public void Interact(PlayerController player)
     {
-        Debug.Log(hasHeart);
-        if (hasHeart)
+        if(player.playerHearts >= 1)
         {
-            if (!heartConsumed)
-            {
-                player.ChangeHearts(0.25f);
-                heartConsumed = true;
-            }
-            else
-            {
-                player.ChangeHearts(0.25f);
-                player.ChangeHeartease(10f);
-            }
+            hasHeart = true;
+            player.ChangeHearts(-1);
+            player.ChangeHeartease(10f);
+            StartCoroutine(Love(player));
+        }
+        else if (!hasHeart)
+        {
+            StartCoroutine(Talk(player));
         }
         else
         {
-            player.ChangeHearts(0.25f);
-            player.ChangeStress(5f);
+            StartCoroutine(Love(player));
         }
+    }
+
+    public IEnumerator Love(PlayerController target)
+    {
+        anime.gameObject.SetActive(true);
+        anime.Play("Talking_Good");
+        target.canMove = false;
+        target.isBusy = true;
+        yield return new WaitForSecondsRealtime(2.5f);
+        anime.gameObject.SetActive(false);
+        target.canMove = true;
+        target.isBusy = false;
+    }
+
+    public IEnumerator Talk(PlayerController target)
+    {
+        target.canMove = false;
+        target.isBusy = true;
+        anime.gameObject.SetActive(true);
+        anime.Play("Talking_Bad");
+        target.ChangeHearts(0.25f);
+        target.ChangeStress(5f);
+        yield return new WaitForSecondsRealtime(2.5f);
+        anime.gameObject.SetActive(false);
+        target.canMove = true;
+        target.isBusy = false;
     }
 }
