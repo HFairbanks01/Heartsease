@@ -53,6 +53,8 @@ public class PlayerController : MonoBehaviour
     public GameObject alleyUI;
     public Transform alleyA, alleyB;
 
+    public GameObject eButton;
+
     void Update()
     {
         transform.position = Vector3.MoveTowards(transform.position, nextPoint.position, (moveSpeed - movePenalty) * Time.deltaTime);
@@ -115,13 +117,25 @@ public class PlayerController : MonoBehaviour
             anime.SetBool("IsMoving", false);
         }
 
+        if (hit = Physics2D.OverlapCircle(this.transform.position, 1.1f, npcLayer))
+        {
+            eButton.SetActive(true);
+        }else if(hit = Physics2D.OverlapCircle(this.transform.position, 1.1f, interactLayer))
+        {
+            eButton.SetActive(true);
+        }
+        else
+        {
+            eButton.SetActive(false);
+        }
+
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (hit = Physics2D.OverlapCircle(this.transform.position, 2f, npcLayer))
+            if (hit = Physics2D.OverlapCircle(this.transform.position, 1.1f, npcLayer))
             {
                 hit.gameObject.GetComponent<NPCController>().Interact(this);
             }
-            if (hit = Physics2D.OverlapCircle(this.transform.position, 2, interactLayer))
+            if (hit = Physics2D.OverlapCircle(this.transform.position, 1.1f, interactLayer))
             {
                 Debug.Log(hit.gameObject.tag);
                 if (hit.gameObject.tag == "Alleyway")
