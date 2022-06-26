@@ -5,6 +5,8 @@ using UnityEngine;
 public class GroundingGame : MonoBehaviour
 {
 
+    public PlayerController player;
+
     public GameObject qSquare;
     public GameObject rSquare;
     public GameObject newBox;
@@ -51,9 +53,13 @@ public class GroundingGame : MonoBehaviour
                 currentTime = 0;
             }
             
+            if (points >= 3)
+            {
+                player.ChangeStress(-15);
+                player.isBusy = false;
+                player.canMove = true;
+                this.gameObject.SetActive(false);
+            }
         }
-
-        
     }
-
 }

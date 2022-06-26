@@ -62,6 +62,10 @@ public class PlayerController : MonoBehaviour
 
     public GameObject eButton;
 
+    public GameObject grounding;
+
+    public Animator portrait;
+
     void Update()
     {
         transform.position = Vector3.MoveTowards(transform.position, nextPoint.position, (moveSpeed - movePenalty) * Time.deltaTime);
@@ -181,11 +185,15 @@ public class PlayerController : MonoBehaviour
             canMove = false;
             breathingUI.SetActive(true);
             breathingCursor.Go(this);
+            portrait.SetInteger("State", 4);
         }
 
         if (Input.GetKeyDown(KeyCode.X) && !isBusy)
         {
-
+            isBusy = true;
+            canMove = false;
+            grounding.SetActive(true);
+            portrait.SetInteger("State", 3);
         }
 
         needle.transform.rotation = Quaternion.RotateTowards(needle.transform.rotation, needleTarget, 10 * Time.deltaTime);
@@ -248,7 +256,16 @@ public class PlayerController : MonoBehaviour
                 stressMinorLight.Play("FadeLight");
                 stressed_Minor = true;
                 StartCoroutine(Stressing());
+                portrait.SetInteger("State", 2);
             }
+        }
+        else if(playerStress < 90)
+        {
+            portrait.SetInteger("State", 1);
+        }
+        else if (playerStress < 30)
+        {
+            portrait.SetInteger("State", 0);
         }
     }
 
