@@ -5,12 +5,15 @@ using UnityEngine;
 public class GroundingGame : MonoBehaviour
 {
 
-    public float playerPosition;
     public GameObject box;
     public GameObject square;
-    //public Transform spawnPoint;
+    public GameObject newBox;
+    public Transform leftSpawnPoint;
+    public Transform rightSpawnPoint;
+    public float leftVelocity;
+    public float rightVelocity;
     public int TickTime = 1;
-    private float currentTime = 0;
+    public float currentTime = 0;
     private float randomNumber;
 
     // Start is called before the first frame update
@@ -26,17 +29,25 @@ public class GroundingGame : MonoBehaviour
         
         if (currentTime >= 1)
         {
-            randomNumber = Random.Range(0, 1);
+            randomNumber = Random.Range(0, 2);
+            Debug.Log("Worked");
+            
             if (randomNumber == 0)
             {
-                
+                newBox = Instantiate(square, leftSpawnPoint.position, leftSpawnPoint.rotation);
+                newBox.transform.position -= Vector3.up * leftVelocity * Time.deltaTime;
+                currentTime = 0;
             }
-            currentTime = 0;
+            else if (randomNumber == 1)
+            {
+                newBox = Instantiate(square, rightSpawnPoint.position, rightSpawnPoint.rotation);
+                newBox.transform.position -= Vector3.up * rightVelocity * Time.deltaTime;
+                currentTime = 0;
+            }
+            
         }
+
+        
     }
 
-    public void SpawnBox()
-    {
-        //var newBox = Instantiate(square, spawnPoint.position, spawnPoint.rotation);
-    }
 }
