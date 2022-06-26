@@ -51,6 +51,7 @@ public class PlayerController : MonoBehaviour
     public Quaternion needleTarget;
 
     public GameObject alleyUI;
+    public Transform alleyA, alleyB;
 
     void Update()
     {
@@ -105,20 +106,25 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-        else
+        else if(isBusy == false)
         {
             anime.SetBool("IsMoving", true);
         }
-
-        if (Input.GetButtonDown("Fire1"))
+        else
         {
-            if (hit = Physics2D.OverlapCircle(this.transform.position + facingDirection, .2f, npcLayer))
+            anime.SetBool("IsMoving", false);
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (hit = Physics2D.OverlapCircle(this.transform.position, 2f, npcLayer))
             {
                 hit.gameObject.GetComponent<NPCController>().Interact(this);
             }
-            if (hit = Physics2D.OverlapCircle(this.transform.position + facingDirection, .2f, interactLayer))
+            if (hit = Physics2D.OverlapCircle(this.transform.position, 2, interactLayer))
             {
-                if(hit.gameObject.tag == "Alleyway")
+                Debug.Log(hit.gameObject.tag);
+                if (hit.gameObject.tag == "Alleyway")
                 {
                     alleyUI.SetActive(true);
                 }
@@ -160,12 +166,6 @@ public class PlayerController : MonoBehaviour
         {
 
         }
-
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            ChangeStress(1);
-        }
-
 
         needle.transform.rotation = Quaternion.RotateTowards(needle.transform.rotation, needleTarget, 10 * Time.deltaTime);
     }
@@ -284,6 +284,20 @@ public class PlayerController : MonoBehaviour
         {
             ChangeStress(25);
         }
+
+        if(Vector2.Distance(this.transform.position, alleyB.position) >= Vector2.Distance(this.transform.position, alleyA.position))
+        {
+            this.transform.position = alleyB.position;
+            nextPoint.position = alleyB.position;
+            lastPoint.position = nextPoint.position + new Vector3(1,0,0);
+        }
+        else
+        {
+            this.transform.position = alleyA.position;
+            nextPoint.position = alleyA.position;
+            lastPoint.position = nextPoint.position + new Vector3(1, 0, 0);
+        }
+        alleyUI.SetActive(false);
     }
 
     public void AlleyNo()
