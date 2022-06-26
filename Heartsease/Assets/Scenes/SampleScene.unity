@@ -9635,8 +9635,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 748a912bc7a9f574a819b7cf6a2115d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  box: {fileID: 1318917083586526390, guid: f82aa65b94971294f83143af5cac14dc, type: 3}
-  square: {fileID: 2146588043794589696, guid: 2d1963353cf484e4ab187907ed1a9ade, type: 3}
+  qSquare: {fileID: 521679613986270348, guid: 2d1963353cf484e4ab187907ed1a9ade, type: 3}
+  rSquare: {fileID: 5920947465806616114, guid: c6e00ddb2bbdf404aaf817cf0ecc23d9, type: 3}
   newBox: {fileID: 0}
   leftChest: {fileID: 1564746302}
   rightChest: {fileID: 1015547118}

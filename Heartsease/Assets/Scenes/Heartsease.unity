@@ -10501,7 +10501,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_NormalColor: {r: 1, g: 0.5518868, b: 0.5518868, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -10525,9 +10525,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
+  m_MaxValue: 100
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -11238,7 +11238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.5235849, b: 0.5235849, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -13218,9 +13218,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anime: {fileID: 1564770132}
   sprite: {fileID: 1564770127}
-  playerHearts: 0
+  playerHearts: 1
   playerHeartease: 0
   playerStress: 0
+  playerEase: {fileID: 1252873773}
   heartGauge: {fileID: 601013829}
   emptyHeart: {fileID: 21300000, guid: d3ba190bfa4542c43af42f6d89397556, type: 3}
   partialHeart1: {fileID: 21300000, guid: 996df6e44b996744ea49afba261ada42, type: 3}
@@ -13362,8 +13363,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 748a912bc7a9f574a819b7cf6a2115d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  box: {fileID: 1318917083586526390, guid: f82aa65b94971294f83143af5cac14dc, type: 3}
-  square: {fileID: 2146588043794589696, guid: 2d1963353cf484e4ab187907ed1a9ade, type: 3}
+  qSquare: {fileID: 0}
+  rSquare: {fileID: 0}
   newBox: {fileID: 0}
   leftChest: {fileID: 0}
   rightChest: {fileID: 0}

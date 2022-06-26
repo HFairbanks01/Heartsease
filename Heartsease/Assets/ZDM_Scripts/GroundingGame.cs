@@ -5,8 +5,8 @@ using UnityEngine;
 public class GroundingGame : MonoBehaviour
 {
 
-    public GameObject box;
-    public GameObject square;
+    public GameObject qSquare;
+    public GameObject rSquare;
     public GameObject newBox;
     public GameObject leftChest;
     public GameObject rightChest;
@@ -34,17 +34,17 @@ public class GroundingGame : MonoBehaviour
         {
             randomNumber = Random.Range(0, 2);
             
-            if (randomNumber == 0)
+            if (randomNumber == 0 && points < 3)
             {
-                newBox = Instantiate(square, leftSpawnPoint.position, leftSpawnPoint.rotation);
+                newBox = Instantiate(qSquare, leftSpawnPoint.position, leftSpawnPoint.rotation);
                 newBox.GetComponent<Velocity>().targetVelocity = leftVelocity;
                 newBox.GetComponent<Velocity>().targetChest = leftChest;
                 newBox.GetComponent<Velocity>().game = this;
                 currentTime = 0;
             }
-            else if (randomNumber == 1)
+            else if (randomNumber == 1 && points < 3)
             {
-                newBox = Instantiate(square, rightSpawnPoint.position, rightSpawnPoint.rotation);
+                newBox = Instantiate(rSquare, rightSpawnPoint.position, rightSpawnPoint.rotation);
                 newBox.GetComponent<Velocity>().targetVelocity = rightVelocity;
                 newBox.GetComponent<Velocity>().targetChest = rightChest;
                 newBox.GetComponent<Velocity>().game = this;
